@@ -1,2 +1,2 @@
-# portfolio_projects
+# Portfolio
 A collection of portfolio projects
