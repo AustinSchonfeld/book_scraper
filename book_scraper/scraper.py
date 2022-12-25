@@ -3,17 +3,30 @@ from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen
 import pandas as pd
 
-#save the website url
-url = 'http://books.toscrape.com/catalogue/page-1.html'
-#open the url
-page = urlopen(url)
-#read the website html
-html = page.read().decode('utf-8')
-#create a soup object
-soup = bs(html, 'html.parser')
-#grab the product section of each book entry
-section = soup.find(class_ = 'product_pod').find('a').find('img')
-print(section.attrs['alt'])
-
+#create empty lists to add book titles and prices to
+titles = []
+prices = []
+#loop through the 50 pages of books, grabbing every book title on each page
+for i in range(1, 51):
+    url = "http://books.toscrape.com/catalogue/page-"+str(i)+".html"
+    page = urlopen(url)
+    html = page.read().decode('utf-8')
+    soup = bs(html, 'html.parser')
+    #find relevant tags on the page
+    books = soup.find_all("a")
+    #find relevant prices on page
+    costs = soup.find_all("p", class_="price_color")
+    #loop through the books on the page, passing over irrelevant tag data
+    for book in books:
+        if "title" in book.attrs:
+            titles.append(book.attrs.get('title'))
+        else: 
+            pass
+    for price in costs:
+        prices.append(price)
+#combine titles and prices
+#create data frame
+df = pd.DataFrame(list(zip(titles, prices)))
+print(df.head())
 
 
