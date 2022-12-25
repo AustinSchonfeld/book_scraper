@@ -1,2 +1,2 @@
-# Portfolio
-A collection of portfolio projects
+# Portfolio Project: Book Scraper
+A web scraper that collects book titles and prices
