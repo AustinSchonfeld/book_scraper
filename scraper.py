@@ -23,10 +23,18 @@ for i in range(1, 51):
         else: 
             pass
     for price in costs:
-        prices.append(price)
+        prices.append(price.text)
 #combine titles and prices
 #create data frame
 df = pd.DataFrame(list(zip(titles, prices)))
-print(df.head())
+
+#change column names of dataframe
+df.rename(columns = {0:"Titles", 1:"Prices"}, inplace = True)
+
+#clean prices and change to float
+df.Prices = df.Prices.apply(lambda x: x[1:])
+df.Prices = df.Prices.astype(float)
+
+
 
 
