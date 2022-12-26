@@ -2,6 +2,7 @@
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen
 import pandas as pd
+from matplotlib import pyplot as plt
 
 #create empty lists to add book titles and prices to
 titles = []
@@ -34,6 +35,15 @@ df.rename(columns = {0:"Titles", 1:"Prices"}, inplace = True)
 #clean prices and change to float
 df.Prices = df.Prices.apply(lambda x: x[1:])
 df.Prices = df.Prices.astype(float)
+
+#create a histogram of the prices
+xticks = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65]
+plt.hist(df.Prices, bins = 10, edgecolor = "black")
+plt.title("Distribution of Book Prices")
+plt.xlabel("Book Price")
+plt.ylabel("Number of Books")
+plt.xticks(xticks)
+plt.savefig('prices.png')
 
 
 
