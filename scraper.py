@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen
 import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
 
 #create empty lists to add book titles and prices to
 titles = []
@@ -98,12 +100,49 @@ df.drop_duplicates(inplace = True)
 print(df.duplicated().sum())
 #check that df is 1000 entries, the number of books on the website
 print(len(df))
+#two of the categories are essentially unnamed, rename them to misc
+df.Category = df.Category.replace(['Default', "Add a comment"], 'Misc.')
 #export df to csv
 df.to_csv('data.csv', index = False)
 
 ### Let's make some graphs ###
+#create a histogram of the prices
+xticks = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65]
+plt.hist(df.Price, bins = 10, edgecolor = "black")
+plt.title("Distribution of Book Prices")
+plt.xlabel("Book Price")
+plt.ylabel("Number of Books")
+plt.xticks(xticks)
+plt.savefig('prices.png')
+plt.clf()
 
+#create a bar plot of books per category
+f = plt.figure()
+f.set_figwidth(20)
+f.set_figheight(10)
+plt.bar(df.Category.value_counts().index, df.Category.value_counts().values)
+plt.xlabel("Category")
+plt.ylabel("Number of Books")
+plt.title("Number of Books in Each Category")
+plt.xticks(rotation = 90)
+plt.tight_layout()
+plt.savefig('categories.png')
+plt.clf()
 
+#create a histogram of the length of book titles
+#first get the min and max values of title lengths
+min = min(df.Title.str.len())
+max = max(df.Title.str.len())
+print(min)
+print(max)
+xticks = [*range(0, 220, 10)]
+plt.hist(df.Title.str.len(), bins = xticks, edgecolor = "black")
+plt.title("Distribution of Title Lengths")
+plt.xlabel("Title Length")
+plt.ylabel("Number of Books")
+plt.xticks(xticks)
+plt.savefig('title_length.png')
+plt.clf()
 
 
 
